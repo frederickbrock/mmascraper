@@ -64,13 +64,15 @@ fn capture_fighter_basic_info(body: &mut Bytes) -> Vec<Fighter> {
         let mut fighter_name = node.find(Attr("class", "c-listing-athlete__name"));
         let mut fighter_name = fighter_name.next().unwrap().text().trim().to_string();
 
+        let fighter_name: Vec[&str] = fighter_name.split_whitespace().iter().collect();
         let fighter_nickname    = extract_first_descendant("c-listing-athlete__nickname", &node);
         let figher_nickname     = &fighter_nickname[1..fighter_nickname.len() - 2];
         let fighter_weightclass = extract_first_descendant("c-listing-athlete__title", &node);
         let fighter_record = extract_fighter_record(&node);
         
-        println!("fighter ( {}, {}, {}, {}-{}-{} )",
-                            fighter_name,
+        println!("fighter ( {}, {}, {}, {}, {}-{}-{} )",
+                            fighter_name[0],
+                            fighter_name[1],
                             fighter_nickname,
                             fighter_weightclass, 
                             fighter_record.0, 
@@ -146,6 +148,8 @@ pub fn persist_fighter_name(sub: &Fighter) -> bool {
 
     let col = client.db("local").collection("fighter");
     
+    col.find("")
+
 
     let doc = doc!{ "name" : &sub.name,
                     "weightclass": &sub.weightclass,
@@ -163,12 +167,15 @@ pub fn persist_fighter_name(sub: &Fighter) -> bool {
 #[derive(Deserialize, Debug)]
 pub struct Fighter {
      pub name: String,
+     pub first_name: String,
+     pub last_name: String,
      pub link: String,
      pub weightclass: String,
      pub nickname: String,
      pub win: i32,
      pub loss: i32,
      pub draw: i32,
+     pub source: String,
 }
 
 #[derive(Deserialize, Debug)]
