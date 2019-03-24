@@ -65,6 +65,8 @@ fn capture_fighter_basic_info(body: &mut Bytes) -> Vec<Fighter> {
         let mut fighter_name = fighter_name.next().unwrap().text().trim().to_string();
 
         let fighter_nickname    = extract_first_descendant("c-listing-athlete__nickname", &node);
+        let figher_nickname     = &fighter_nickname[1..];
+        let fighter_nickname    = &fighter_nickname[0..fighter_nickname.len() - 2];
         let fighter_weightclass = extract_first_descendant("c-listing-athlete__title", &node);
         let fighter_record = extract_fighter_record(&node);
         
@@ -132,9 +134,9 @@ pub fn crawl_for_fighter_stats(fighter_name: &str ) -> impl Future<Item=Vec<Figh
             .and_then(|body| { //this is the second step
                 
                 let mut html_body = Bytes::from(body);
-                let Fighters: Vec<FighterStat> = capture_fighter_stats(&mut html_body);
+                let fighters: Vec<FighterStat> = capture_fighter_stats(&mut html_body);
                 
-                Ok(Fighters)
+                Ok(fighters)
             }).from_err()
 }
 
