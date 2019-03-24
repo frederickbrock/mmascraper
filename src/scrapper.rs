@@ -65,8 +65,7 @@ fn capture_fighter_basic_info(body: &mut Bytes) -> Vec<Fighter> {
         let mut fighter_name = fighter_name.next().unwrap().text().trim().to_string();
 
         let fighter_nickname    = extract_first_descendant("c-listing-athlete__nickname", &node);
-        let figher_nickname     = &fighter_nickname[1..];
-        let fighter_nickname    = &fighter_nickname[0..fighter_nickname.len() - 2];
+        let figher_nickname     = &fighter_nickname[1..fighter_nickname.len() - 2];
         let fighter_weightclass = extract_first_descendant("c-listing-athlete__title", &node);
         let fighter_record = extract_fighter_record(&node);
         
@@ -81,7 +80,7 @@ fn capture_fighter_basic_info(body: &mut Bytes) -> Vec<Fighter> {
         fighters.push(Fighter{
                             name: fighter_name,
                             link: String::from("http://www.action.com"), 
-                            nickname: fighter_nickname,
+                            nickname: fighter_nickname.to_string(),
                             weightclass: fighter_weightclass,
                             win: fighter_record.0,
                             loss: fighter_record.1,
